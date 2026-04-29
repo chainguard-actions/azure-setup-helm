@@ -1,5 +1,6 @@
 {
   "owner": "azure",
   "name": "setup-helm",
-  "visibility": ""
+  "visibility": "internal",
+  "description": "Github Action for installing Helm"
 }
