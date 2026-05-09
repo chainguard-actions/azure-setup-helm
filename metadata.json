@@ -2,5 +2,6 @@
   "owner": "azure",
   "name": "setup-helm",
   "visibility": "internal",
-  "description": "Github Action for installing Helm"
+  "description": "Github Action for installing Helm",
+  "block_publish": false
 }
