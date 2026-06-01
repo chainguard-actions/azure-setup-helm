@@ -1,14 +1,14 @@
-# azure/setup-helm
+# Azure/setup-helm
 
 Github Action for installing Helm
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/azure/setup-helm](https://github.com/azure/setup-helm).
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/Azure/setup-helm](https://github.com/Azure/setup-helm).
 
 ## Versions
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/azure--setup-helm/tree/v5.0.0) | — |
+| v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/Azure-setup-helm/tree/v5.0.0) | — |
 
 ## Privacy
 
