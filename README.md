@@ -1,14 +1,14 @@
-# Azure/setup-helm
+# azure/setup-helm
 
-Github Action for installing Helm
+Install a specific version of helm binary. Acceptable values are latest or any semantic version string like 1.15.0
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/Azure/setup-helm](https://github.com/Azure/setup-helm).
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/azure/setup-helm](https://github.com/azure/setup-helm).
 
 ## Versions
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/Azure-setup-helm/tree/v5.0.0) | — |
+| v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/azure-setup-helm/tree/v5.0.0) | — |
 
 ## Privacy
 

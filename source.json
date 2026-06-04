@@ -1,6 +1,6 @@
 {
-  "owner": "Azure",
+  "owner": "azure",
   "repo": "setup-helm",
   "version": "",
-  "url": "https://github.com/Azure/setup-helm"
+  "url": "https://github.com/azure/setup-helm"
 }
