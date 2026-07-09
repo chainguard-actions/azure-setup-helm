@@ -1,0 +1,41 @@
+name: Test helm installer with token input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          version: 'latest'
+          token: ${{ github.token }}
+      - name: Assert helm-path output is set
+        env:
+          ACTUAL: ${{ steps.action.outputs.helm-path }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ -z "$ACTUAL" ]; then
+            echo "FAIL: expected helm-path to be non-empty"
+            exit 1
+          fi
+          echo "PASS: helm-path is $ACTUAL"
+      - name: Assert helm binary exists at reported path
+        env:
+          HELM_PATH: ${{ steps.action.outputs.helm-path }}
+        run: |
+          echo "helm-path: $HELM_PATH"
+          if [ ! -f "$HELM_PATH" ]; then
+            echo "FAIL: helm binary not found at $HELM_PATH"
+            exit 1
+          fi
+          echo "PASS: helm binary found at $HELM_PATH"
+      - name: Assert helm is executable and returns version
+        run: |
+          helm version --short
+          if [ $? -ne 0 ]; then
+            echo "FAIL: helm version command failed"
+            exit 1
+          fi
+          echo "PASS: helm is functional"

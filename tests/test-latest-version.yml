@@ -1,0 +1,40 @@
+name: Test helm installer - latest version
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup-helm
+        uses: .
+        with:
+          version: latest
+      - name: Assert helm-path output is set
+        env:
+          HELM_PATH: ${{ steps.setup-helm.outputs.helm-path }}
+        run: |
+          echo "helm-path: $HELM_PATH"
+          if [ -z "$HELM_PATH" ]; then
+            echo "FAIL: helm-path output is empty"
+            exit 1
+          fi
+          echo "PASS: helm-path is set to $HELM_PATH"
+      - name: Assert helm binary exists at output path
+        env:
+          HELM_PATH: ${{ steps.setup-helm.outputs.helm-path }}
+        run: |
+          echo "Checking helm binary at: $HELM_PATH"
+          if [ ! -f "$HELM_PATH" ]; then
+            echo "FAIL: helm binary not found at $HELM_PATH"
+            exit 1
+          fi
+          echo "PASS: helm binary exists at $HELM_PATH"
+      - name: Assert helm is executable and works
+        run: |
+          helm version
+          if [ $? -ne 0 ]; then
+            echo "FAIL: helm version command failed"
+            exit 1
+          fi
+          echo "PASS: helm is functional"
