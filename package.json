@@ -1,0 +1,35 @@
+{
+   "name": "setuphelm",
+   "version": "5.0.1",
+   "private": true,
+   "description": "Setup helm",
+   "author": "Anumita Shenoy",
+   "license": "MIT",
+   "type": "module",
+   "dependencies": {
+      "@actions/core": "^3.0.1",
+      "@actions/exec": "^3.0.0",
+      "@actions/io": "^3.0.2",
+      "@actions/tool-cache": "4.0.0",
+      "@octokit/action": "^8.0.4",
+      "semver": "^7.8.5"
+   },
+   "main": "lib/index.js",
+   "scripts": {
+      "build": "tsc --noEmit && esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=lib/index.js --banner:js=\"import { createRequire } from 'module';const require = createRequire(import.meta.url);\"",
+      "typecheck": "tsc --noEmit",
+      "test": "vitest run",
+      "test-coverage": "vitest run --coverage",
+      "format": "prettier --write .",
+      "format-check": "prettier --check .",
+      "prepare": "husky"
+   },
+   "devDependencies": {
+      "@types/node": "^26.0.0",
+      "esbuild": "^0.28",
+      "husky": "^9.1.7",
+      "prettier": "^3.8.4",
+      "typescript": "^6.0.3",
+      "vitest": "^4"
+   }
+}

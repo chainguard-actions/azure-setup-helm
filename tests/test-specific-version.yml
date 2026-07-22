@@ -1,0 +1,42 @@
+name: Test helm installer - specific version
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup-helm
+        uses: .
+        with:
+          version: 'v3.14.0'
+      - name: Assert helm-path output is set
+        env:
+          HELM_PATH: ${{ steps.setup-helm.outputs.helm-path }}
+        run: |
+          echo "helm-path: $HELM_PATH"
+          if [ -z "$HELM_PATH" ]; then
+            echo "FAIL: helm-path output is empty"
+            exit 1
+          fi
+          echo "PASS: helm-path is set to $HELM_PATH"
+      - name: Assert helm binary exists at output path
+        env:
+          HELM_PATH: ${{ steps.setup-helm.outputs.helm-path }}
+        run: |
+          echo "Checking helm binary at: $HELM_PATH"
+          if [ ! -f "$HELM_PATH" ]; then
+            echo "FAIL: helm binary not found at $HELM_PATH"
+            exit 1
+          fi
+          echo "PASS: helm binary exists"
+      - name: Assert installed helm version matches requested version
+        run: |
+          helm_version=$(helm version --short 2>&1)
+          echo "helm version output: $helm_version"
+          if echo "$helm_version" | grep -q "v3.14.0"; then
+            echo "PASS: helm version matches v3.14.0"
+          else
+            echo "FAIL: expected helm version v3.14.0, got: $helm_version"
+            exit 1
+          fi
