@@ -10,6 +10,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 |---------|-----|-----------------|
 | v3.5 | [`v3.5`](https://github.com/chainguard-actions/azure-setup-helm/tree/v3.5) | [`5119fcb`](https://github.com/azure/setup-helm/commit/5119fcb9089d432beecbf79bb2c7915207344b78) |
 | v5.0.0 | [`v5.0.0`](https://github.com/chainguard-actions/azure-setup-helm/tree/v5.0.0) | [`dda3372`](https://github.com/azure/setup-helm/commit/dda3372f752e03dde6b3237bc9431cdc2f7a02a2) |
+| v5.0.1 | [`v5.0.1`](https://github.com/chainguard-actions/azure-setup-helm/tree/v5.0.1) | [`9bc31f4`](https://github.com/azure/setup-helm/commit/9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310) |
 
 ## Privacy
 
