@@ -1,0 +1,33 @@
+name: 'Run unit tests.'
+on: # rebuild any PRs and main branch changes
+   pull_request:
+      branches:
+         - main
+         - 'releases/*'
+   push:
+      branches:
+         - main
+         - 'releases/*'
+
+permissions:
+   contents: read
+
+jobs:
+   build: # make sure build/ci works properly
+      strategy:
+         matrix:
+            os:
+               - ubuntu-latest
+               - ubuntu-24.04-arm
+               - windows-latest
+               - windows-11-arm
+               - macos-latest # arm
+         fail-fast: false
+      runs-on: ${{ matrix.os }}
+      steps:
+         - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+         - name: Run L0 tests.
+           run: |
+              npm install
+              npm test

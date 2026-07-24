@@ -1,0 +1,42 @@
+name: Test helm installer - default version (no version input)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        # No version specified — should use default 'latest'
+      - name: Assert helm-path output is set
+        env:
+          HELM_PATH: ${{ steps.action.outputs.helm-path }}
+        run: |
+          echo "helm-path: $HELM_PATH"
+          if [ -z "$HELM_PATH" ]; then
+            echo "FAIL: helm-path output is empty"
+            exit 1
+          fi
+          echo "PASS: helm-path is set"
+      - name: Assert helm-path contains 'helm' in the filename
+        env:
+          HELM_PATH: ${{ steps.action.outputs.helm-path }}
+        run: |
+          echo "Checking helm-path contains 'helm': $HELM_PATH"
+          BASENAME=$(basename "$HELM_PATH")
+          echo "basename: $BASENAME"
+          if [ "$BASENAME" != "helm" ]; then
+            echo "FAIL: expected basename 'helm' but got '$BASENAME'"
+            exit 1
+          fi
+          echo "PASS: helm-path basename is 'helm'"
+      - name: Assert helm binary is functional
+        run: |
+          echo "Running helm version"
+          helm version
+          if [ $? -ne 0 ]; then
+            echo "FAIL: helm version command failed"
+            exit 1
+          fi
+          echo "PASS: helm is functional"

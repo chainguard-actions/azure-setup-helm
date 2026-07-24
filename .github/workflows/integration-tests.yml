@@ -1,0 +1,93 @@
+name: 'Trigger Integration tests'
+on:
+   pull_request:
+      branches:
+         - main
+         - 'releases/*'
+
+permissions: {}
+
+jobs:
+   trigger-integration-tests:
+      name: Trigger Integration tests
+      strategy:
+         matrix:
+            os:
+               - ubuntu-latest
+               - ubuntu-24.04-arm
+               - macos-latest # arm
+         fail-fast: false
+      runs-on: ${{ matrix.os }}
+      env:
+         HELM_3_18_4: 'v3.18.4'
+         HELM_3_18_0: 'v3.18.0'
+         HELM_NO_V: '3.18.4'
+         PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+      steps:
+         - name: Check out repository
+           uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+         - name: npm install and build
+           id: action-npm-build
+           run: |
+              echo "$PR_BASE_REF"
+              if [[ "$PR_BASE_REF" != releases/* ]]; then
+                npm install
+                npm run build
+              fi
+         - name: Setup helm
+           uses: ./
+           with:
+              version: ${{ env.HELM_3_18_4 }}
+         - name: Validate helm 3.18.4
+           run: |
+              if [[ $(helm version) != *$HELM_3_18_4* ]]; then
+                echo "HELM VERSION INCORRECT: HELM VERSION DOES NOT CONTAIN v3.18.4"
+                echo "HELM VERSION OUTPUT: $(helm version)"
+                exit 1
+              else
+                echo "HELM VERSION $HELM_3_18_4 INSTALLED SUCCESSFULLY"
+              fi
+         - name: Setup helm 3.18.0
+           uses: ./
+           with:
+              version: ${{ env.HELM_3_18_0 }}
+         - name: Validate 3.18.0
+           run: |
+              if [[ $(helm version) != *$HELM_3_18_0* ]]; then
+                echo "HELM VERSION INCORRECT: HELM VERSION DOES NOT CONTAIN v3.18.0"
+                echo "HELM VERSION OUTPUT: $(helm version)"
+                exit 1
+              else
+                echo "HELM VERSION $HELM_3_18_0 INSTALLED SUCCESSFULLY"
+              fi
+         - name: Setup helm 3.18.4 with no v in version
+           uses: ./
+           with:
+              version: ${{ env.HELM_NO_V }}
+         - name: Validate 3.18.4 without v in version
+           run: |
+              if [[ $(helm version) != *$HELM_NO_V* ]]; then
+                echo "HELM VERSION INCORRECT: HELM VERSION DOES NOT CONTAIN 3.18.4"
+                echo "HELM VERSION OUTPUT: $(helm version)"
+                exit 1
+              else
+                echo "HELM VERSION $HELM_NO_V INSTALLED SUCCESSFULLY"
+              fi
+         - name: Setup helm latest version
+           uses: ./
+           with:
+              version: latest
+              token: ${{ secrets.GITHUB_TOKEN }}
+         - name: Validate latest
+           env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           run: |
+              HELM_LATEST=$(curl -s https://get.helm.sh/helm-latest-version)
+
+              if [[ $(helm version) != *$HELM_LATEST* ]]; then
+                echo "HELM VERSION INCORRECT: HELM VERSION DOES NOT CONTAIN $HELM_LATEST"
+                echo "HELM VERSION OUTPUT: $(helm version)"
+                exit 1
+              else
+                echo "HELM VERSION $HELM_LATEST INSTALLED SUCCESSFULLY"
+              fi
