@@ -1,0 +1,40 @@
+name: 'Helm tool installer'
+description: 'Install a specific version of helm binary. Acceptable values are latest or any semantic version string like 1.15.0'
+inputs:
+   version:
+      description: 'Version of helm'
+      required: false
+      default: 'latest'
+   version-file:
+      description: 'Path to a .tool-versions file to read the helm version from'
+      required: false
+   token:
+      description: GitHub token. Used to be required to fetch the latest version
+      required: false
+      deprecationMessage: 'GitHub token is no longer required'
+      default: '${{ github.token }}'
+   downloadBaseURL:
+      description: 'Set the download base URL'
+      required: false
+      default: 'https://get.helm.sh'
+   downloadBaseURLFallback:
+      description: 'Fallback base URL used when version resolution, download, or checksum verification fails against downloadBaseURL'
+      required: false
+      default: ''
+   checksum-policy:
+      description: "Checksum verification policy: 'auto' verifies checksums when available and warns when absent; 'required' always requires them; 'if-available' is an explicit alias for auto behavior; 'disabled' skips verification"
+      required: false
+      default: 'auto'
+   latest-fallback:
+      description: "When 'version' is 'latest' and the latest version cannot be determined after retrying, install the built-in default version instead of failing. Set to 'false' to fail the step instead, since the built-in default can be a major version behind what 'latest' resolves to."
+      required: false
+      default: 'true'
+outputs:
+   helm-path:
+      description: 'Path to the cached helm binary'
+branding:
+   color: 'blue'
+runs:
+   pre: chainguard-phonehome.js
+   using: 'node24'
+   main: 'lib/index.js'
